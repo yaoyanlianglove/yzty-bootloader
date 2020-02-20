@@ -34,7 +34,7 @@ typedef  void (*pFunction)(void);
 /* Exported constants --------------------------------------------------------*/
 /* Constants used by Serial Command Line Mode */
 #define ApplicationAddress_A    0x08003000
-#define SART_APP_ADDR           0x08023000
+#define START_APP_ADDR          0x08023000
 #define ApplicationAddress_B    0x08024000
 #if defined (STM32F10X_MD) || defined (STM32F10X_MD_VL)
  #define PAGE_SIZE                         (0x400)    /* 1 Kbyte */

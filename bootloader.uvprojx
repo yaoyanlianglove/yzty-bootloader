@@ -410,9 +410,9 @@
           <GroupName>driver</GroupName>
           <Files>
             <File>
-              <FileName>uart_485.c</FileName>
+              <FileName>uart_wifi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\driver\uart\uart_485.c</FilePath>
+              <FilePath>.\driver\uart\uart_wifi.c</FilePath>
             </File>
           </Files>
         </Group>

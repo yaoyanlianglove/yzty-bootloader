@@ -8,7 +8,7 @@
 
 #include "common.h"
 #include "stm32f10x_flash.h"
-#include "uart_485.h"
+#include "uart_wifi.h"
 #include "ymodem.h"
 
 u32 FlashDestination = ApplicationAddress_B; /* Flash user program offset */
@@ -29,11 +29,7 @@ u8  Number_EOT = 0;
 *******************************************************************************/
 static u32 Send_Byte (u8 c)
 {
-    _485_DIR_T;
-    Delay_us(200);
     SerialPutChar(c);
-    Delay_us(2000);
-    _485_DIR_R;
     return 0;
 }
 /*******************************************************************************

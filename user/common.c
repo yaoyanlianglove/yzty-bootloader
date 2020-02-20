@@ -9,7 +9,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "common.h"
 #include "ymodem.h"
-#include "uart_485.h"
+#include "uart_wifi.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -114,7 +114,7 @@ u8 FLASH_DisableWriteProtectionPages(void)
     FLASH_Status status = FLASH_BUSY;
 
     /* Get the number of block (4 or 2 pages) from where the user program will be loaded */
-    BlockNbr = (SART_APP_ADDR - 0x08000000) >> 12;
+    BlockNbr = (START_APP_ADDR - 0x08000000) >> 12;
 
   /* Compute the mask to test if the Flash memory, where the user program will be
      loaded, is write protected */

@@ -3,48 +3,44 @@
 * @file    $PROJ_DIR$\..\driver\uart\uart_485.c 
 * @author  yyl
 * @version V1.0
-* @date    05/11/2019
-* @brief   485串口相关的初始化
+* @date    02/20/2020
+* @brief   WIFI串口相关的初始化
 *******************************************************************************/ 
-#include "uart_485.h"
+#include "uart_wifi.h"
 /*******************************************************************************
-** 函数名称: UART_485_GPIO_Init
-** 功能描述: 485uart口IO的初始化
+** 函数名称: UART_WIFI_GPIO_Init
+** 功能描述: WIFIuart口IO的初始化
 ** 参    数: None
 ** 返 回 值: None       
 ** 作　  者: yyl                   
-** 日  　期: 05/11/2019
+** 日  　期: 02/20/2020
 *******************************************************************************/
-void UART_485_GPIO_Init(void)
+void UART_WIFI_GPIO_Init(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
 
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART5, ENABLE);//使能APB1外设时钟
-    RCC_APB2PeriphClockCmd (RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOD, ENABLE);//使能APB2外设时钟
-    GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_2;
-    GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_IN_FLOATING;
-    GPIO_Init(GPIOD, &GPIO_InitStructure);
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART4, ENABLE);//使能APB1外设时钟
+    RCC_APB2PeriphClockCmd (RCC_APB2Periph_GPIOC, ENABLE);//使能APB2外设时钟
 
-    GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_12;
+    GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_11;
+    GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_IN_FLOATING;
+    GPIO_Init(GPIOC, &GPIO_InitStructure);
+
+    GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_10;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_AF_PP;
     GPIO_Init(GPIOC, &GPIO_InitStructure);
-    
-    GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_1;           //串口5半双工切换口 
-    GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_Out_PP;
-    GPIO_Init(GPIOD, &GPIO_InitStructure);
 
-    _485_DIR_T;  //485初始化为发送状态
 }
 /*******************************************************************************
-** 函数名称: UART_485_Setup
-** 功能描述: 485uart口参数配置
+** 函数名称: UART_WIFI_Setup
+** 功能描述: WIFIuart口参数配置
 ** 参    数: None
 ** 返 回 值: None       
 ** 作　  者: yyl                   
-** 日  　期: 05/11/2019
+** 日  　期: 02/20/2020
 *******************************************************************************/
-void UART_485_Setup(void)
+void UART_WIFI_Setup(void)
 { 
     USART_InitTypeDef USART_InitStructure;				//串口参数
     USART_InitStructure.USART_BaudRate            = 9600; 
@@ -53,10 +49,10 @@ void UART_485_Setup(void)
     USART_InitStructure.USART_StopBits            = USART_StopBits_1;	
     USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
     USART_InitStructure.USART_Mode                = USART_Mode_Rx | USART_Mode_Tx;		
-    USART_Init(UART5, &USART_InitStructure);
+    USART_Init(UART4, &USART_InitStructure);
         
-    USART_ClearFlag(UART5, USART_FLAG_TC|USART_FLAG_TXE|USART_FLAG_RXNE);
-    USART_Cmd(UART5, ENABLE);
+    USART_ClearFlag(UART4, USART_FLAG_TC|USART_FLAG_TXE|USART_FLAG_RXNE);
+    USART_Cmd(UART4, ENABLE);
 }
 
 /*******************************************************************************
@@ -86,8 +82,8 @@ void Delay_us(u16 us)
 *******************************************************************************/
 void SerialPutChar(u8 c)
 {
-    USART_SendData(UART5, c);
-    while (USART_GetFlagStatus(UART5, USART_FLAG_TXE) == RESET)
+    USART_SendData(UART4, c);
+    while (USART_GetFlagStatus(UART4, USART_FLAG_TXE) == RESET)
     {
 
     }
@@ -103,15 +99,11 @@ void SerialPutChar(u8 c)
 *******************************************************************************/
 void Serial_PutString(u8 *s)
 {
-    _485_DIR_T;
-    Delay_us(200);
     while (*s != '\0')
     {
         SerialPutChar(*s);
         s++;
     }
-    Delay_us(1000);
-    _485_DIR_R;
 }
 
 /*******************************************************************************
@@ -124,9 +116,9 @@ void Serial_PutString(u8 *s)
 *******************************************************************************/
 u32 SerialKeyPressed(u8 *key)
 {
-    if ( USART_GetFlagStatus(UART5, USART_FLAG_RXNE) != RESET)
+    if ( USART_GetFlagStatus(UART4, USART_FLAG_RXNE) != RESET)
     {
-        *key = (u8)UART5->DR;
+        *key = (u8)UART4->DR;
         return 1;
     }
     else

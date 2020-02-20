@@ -1,5 +1,5 @@
 #include "common.h"
-#include "uart_485.h"
+#include "uart_wifi.h"
 #include "ymodem.h"
 
 extern u8 file_name[FILE_NAME_LENGTH];
@@ -18,7 +18,7 @@ u8 tab_1024[1024] ={0};
 void Erase_Start_Slect_Area(void)
 {
     if(FLASHStatus == FLASH_COMPLETE)
-        FLASHStatus = FLASH_ErasePage(SART_APP_ADDR);
+        FLASHStatus = FLASH_ErasePage(START_APP_ADDR);
 }
 /*******************************************************************************
 ** 函数名称: Write_B_To_Start_Slect_Area
@@ -32,7 +32,7 @@ void Write_B_To_Start_Slect_Area(void)
 {
     u8 data = 'B';
     if(FLASHStatus == FLASH_COMPLETE)
-        FLASHStatus = FLASH_ProgramWord(SART_APP_ADDR, (u32)data);
+        FLASHStatus = FLASH_ProgramWord(START_APP_ADDR, (u32)data);
 }
 /*******************************************************************************
 ** 函数名称: SerialDownload
